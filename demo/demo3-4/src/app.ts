@@ -1,3 +1,7 @@
+import * as _ from 'lodash';
+
+console.log(_.chunk([2],2))
+
 const NUM=45 
 
 interface Cat {
