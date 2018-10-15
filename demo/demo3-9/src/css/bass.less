@@ -1,0 +1,21 @@
+@mainColor:#ff3333;
+html{
+    background: @mainColor;
+}
+
+.box{
+    composes:bigbox from './common.less';
+    height: 100px;
+    width: 200px;
+    background: #333333;
+    border-radius: 4px;
+    transition:transform 1s;
+    display: flex;
+}
+
+:root{
+   --mainColor:red; 
+}
+a{
+    color: var(--mainColor);
+}
