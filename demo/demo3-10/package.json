@@ -1,7 +1,7 @@
 {
   "name": "demo3-9",
   "version": "1.0.0",
-  "description": "提取利用缓存加速加载，提取公共css",
+  "description": "去除无用JS和CSS",
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack --config webpack.config.js",
@@ -10,11 +10,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.1.2",
     "autoprefixer": "^9.1.5",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-lodash": "^3.3.4",
+    "babel-preset-env": "^1.7.0",
     "css-loader": "^1.0.0",
     "cssnano": "^4.1.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^2.0.0",
+    "glob-all": "^3.1.0",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.3",
@@ -22,6 +28,8 @@
     "postcss": "^7.0.5",
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^3.0.0",
+    "purify-css": "^1.2.5",
+    "purifycss-webpack": "^0.7.0",
     "sass-loader": "^7.1.0",
     "scss-loader": "0.0.1",
     "style-loader": "^0.23.1",
@@ -30,5 +38,9 @@
   "browserslist": [
     ">=1%",
     "last 2 versions"
-  ]
+  ],
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "lodash-es": "^4.17.11"
+  }
 }

@@ -33,15 +33,22 @@ less-loader  //处理less
 提取css问题
 1.extract-loader
 2.ExtractTeztWebpackPlugin  插件要初始化。。
-
+   allChunks:false,
 
 postCSS  处理CSS工具
+# cssnext可以让你写CSS4的语言，并能配合autoprefixer进行浏览器兼容的不全，而且还支持嵌套语法
+$ npm install postcss-cssnext --save-dev
 
 Autoprefixer   ==>自动前缀
-CSS-nano ==> 压缩CSS
-CSS-next ==> 新语法识别
-
+CSS-nano ==> 压缩CSS       npm install --save-dev @intervolga/optimize-cssnano-plugin
+CSS-next ==> 新语法识别 
+#remove minimize option, use postcss-loader with cssnano or use optimize-cssnano-plugin plugin
 
 broswerslist  //浏览器公用浏览器兼容级别  所有插件共用
  package.json
  .broswerslist
+
+
+
+ Tree Shaking（去除未使用的代码）上线可以使用
+针对：JS，CSS

@@ -1,6 +1,9 @@
-var webpack=require('webpack');
+var Webpack=require('webpack');
 var path=require('path');
 var ExtractTeztWebpackPlugin=require('extract-text-webpack-plugin');
+var Purifycss=require('purifycss-webpack');
+var glob=require('glob-all')
+
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports={
@@ -22,30 +25,28 @@ module.exports={
                         loader:'style-loader',
                         options:{
                             singleton:true,
-                            transform:'./css.tranform.js'
                         }
                     },
                     use:[{
                             loader:'css-loader',
-                            options:{
-                                modules:true,
-                                localIdentName:'[path][name]_[local]_[hash:base64:5]' //编码名称规则
-                            }
-                        },{
-                            loader:'postcss-loader',
-                            options:{
-                                ident:'postcss',
-                                plugins:[
-                                    require('cssnano')(),
-                                    require('postcss-cssnext')()
-                                ]
-                            }
                         },{
                             loader:'less-loader',
                         }
                     ]
                 })
                 
+            },
+            {
+                test:/\.js$/,  
+                use:[
+                    {
+                        loader:'babel-loader',
+                        options:{
+                            presets:['env'],
+                            plugins:['lodash']
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -54,6 +55,13 @@ module.exports={
             filename:'[name].min.css',
             allChunks:true
         }),
+        new Purifycss({
+            paths:glob.sync([
+                path.join(__dirname,'./index.html'),
+                path.join(__dirname,'./src/*.js')
+            ])
+        }),
+        new Webpack.optimize.UglifyJsPlugin()//删除不用的js和css
     ]
  
 }
