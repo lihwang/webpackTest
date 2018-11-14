@@ -3,8 +3,10 @@ var path=require('path');
 var ExtractTeztWebpackPlugin=require('extract-text-webpack-plugin');
 var Purifycss=require('purifycss-webpack');
 var glob=require('glob-all')
+var HtmlWebpackPlugin=require('html-webpack-plugin');
 
-const devMode = process.env.NODE_ENV !== 'production'
+var htmlInlinkChunkPlugin=require('html-webpack-inline-chunk-plugin');
+// const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports={
     entry:{
@@ -13,7 +15,12 @@ module.exports={
     output:{
         path:path.resolve(__dirname,'dist'),
         // publicPath:'./dist/',        //动态打包加载的路径  发布地址
-        filename:'[name].bundle.js', //初始化打包名称
+        filename:'[name]-[hash:5]-bundle.js', //初始化打包名称
+    },
+    resolve:{
+        alias:{
+            jquery$:path.resolve(__dirname,'src/lib/jquery.min.js')
+        }
     },
     module:{
         rules:[
@@ -56,8 +63,22 @@ module.exports={
                     {
                         loader:'babel-loader',
                         options:{
-                            presets:['env'],
+                            presets:['@babel/preset-env'],
                             plugins:['lodash']
+                        }
+                    }
+                ]
+            },
+            {
+                test:/\.(eot|woff2|woff|ttf|svg)$/,
+                use:[
+                    {
+                        loader:'url-loader',
+                        options:{
+                            name:'[name]-[hash:5].[ext]',
+                            limit:1500,
+                            publicPath:'',//发布路径
+                            useRelativePath:true, //相对路径
                         }
                     }
                 ]
@@ -75,10 +96,11 @@ module.exports={
                     {
                         loader:'url-loader',
                         options:{
-                            name:'[name][hash:5].min.[ext]',
+                            name:'[name]-[hash:5].[ext]',
                             limit:1500,
                             publicPath:'',//发布路径
-                            useRelativePath:true, //相对路径
+                            outputPath:'assets/img/'
+                            // useRelativePath:true, //相对路径
                         }
                     },{
                         loader:'img-loader', 
@@ -92,12 +114,38 @@ module.exports={
                         }
                     }
                 ]
+            },{
+                test:path.resolve(__dirname,'src/app.js'),
+                use:[
+                    {
+                        loader:'imports-loader',
+                        options:{
+                            $:'jquery'
+                        }
+                    }
+                ]
+            },{
+                test:/\.html$/,
+                use:[
+                    {
+                        loader:'html-loader',
+                        options:{
+                            attrs:['img:src','img:data-src'],
+                        }
+                    }
+                ]
             }
         ]
     },
+    optimization:{
+        splitChunks:{
+            chunks: 'all',
+            name: 'manifest',
+        }
+    },
     plugins:[
         new ExtractTeztWebpackPlugin({ //插件配置
-            filename:'[name].min.css',
+            filename:'[name]-[hash:5].css',
             allChunks:true
         }),
         new Purifycss({
@@ -106,7 +154,24 @@ module.exports={
                 path.join(__dirname,'./src/*.js')
             ])
         }),
-        new Webpack.optimize.UglifyJsPlugin()//删除不用的js和css
+        new HtmlWebpackPlugin({
+            filename:'index.html',
+            template:'./index.html',
+            // inject:false,   //不需要自动注入css和js
+            chunks:['app'],
+            minify:{ //压缩空格
+                collapseWhitespace:true
+            }
+
+        }),
+        new htmlInlinkChunkPlugin({
+            inlineChunks:['manifest']
+        })
+        // new Webpack.ProvidePlugin({
+        //     $: 'jquery',
+        //   }),
+        // new Webpack.optimize.UglifyJsPlugin()//删除不用的js和css
+        
     ]
  
 }
