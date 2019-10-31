@@ -1,27 +1,16 @@
-
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const webpack = require('webpack');
-//pulgin有点类似生命钩子函数
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const path = require("path");
 
 module.exports = {
-    mode: "development",
-    devtool: 'source-map', //开发，cheap-module-eval-source-map  线上：cheap-module-source-map
     entry: {
-        main: './src/index.js'
+        main: './src/index.js',
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: '/'
-    },
-    devServer: {
-        contentBase: './dist',
-        port: 8080,
-        open: true,
-        hot: true,
-        hotOnly: true,//即使没有热更新也不刷新
+        path: path.resolve(__dirname, '../dist'),
+        publicPath: './'
     },
     module: {
         rules: [
@@ -68,7 +57,31 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "src/index.html"
         }),
-        new CleanWebpackPlugin.CleanWebpackPlugin(),
-        new webpack.HotModuleReplacementPlugin()//配合devServer,样式和js调试
-    ]
+        new CleanWebpackPlugin(
+            // {dry: true,}
+        ),
+        // new BundleAnalyzerPlugin()
+    ],
+    optimization: {
+        splitChunks: {
+            chunks: "all",//异步同步全部
+            // minSize: 30000,//分割的目标文件最小满足
+            // minChunks: 2,//调用数
+            // maxAsyncRequests: 5,//最大分割数
+            // maxInitialRequests: 3,//入口数
+            // automaticNameDelimiter: '~',//连接符号
+            // name: true,
+            // cacheGroups: {//满足后分割位置 
+            //     vendors: {
+            //         test: /[\\/]node_modules[\\/]/,
+            //         priority: -10 //都符合和情况默认放到的优先级里
+            //     },
+            //     default: {
+            //         minChunks: 2,
+            //         priority: -20,
+            //         reuseExistingChunk: true ,//存在的代码都不重复打包进入
+            //     }
+            // }
+        }
+    }
 }
