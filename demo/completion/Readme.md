@@ -33,11 +33,32 @@ webpack-dev-server 帮忙刷新了页面全部渲染了一边，没有热更新
   2.异步代码（import）也会被打包成一个文件（不需要做配置）
 
   可以通过动态的import实现懒加载
-
+  如果动态导入的文件点击后才会被显示名字规则就是output--chunkFilename： 初次加载未导入
 
   //打包分析webpack-bundle-analyzer
-  代码利用率
-  进入控制台 commond +shift+p show coverage 点击记录，js利用率
+  //官网分析 "dev-build": "webpack --profile --json > stats.json --config ./build/webpack.dev.js",
+  --profile --json > stats.json将打包记录取出送至官网打包分析代码
+
+
+代码利用率
+进入控制台 commond +shift+p show coverage 点击记录，js利用率
+
 
 未使用的业务代码使用动态import导入解决首次加载的问题，但是所有的代码都等待被加载，每次操作加载后变得很慢
 所以就要使用preloading,Prefetching(利用空闲网路来加载页面)英文版本官网有，在代码分割里
+
+
+//cache 合理缓存
+[contenthash]文件内容进行变化，仅线上使用
+
+//Shimming 垫片解决低版本浏览器兼容问题
+例子：当你想使用jq.ui.js库的时候，它是需要使用jq的，但是呢作为模块打入你又不能改源码，就需要使用垫片
+
+//一般js模块内部的this，是指向模块本身的，是一个空对象，如果希望指向window 
+imports-loader?this=>window
+
+//环境变量
+webpack --env.production=true 
+可以在module.exports=(env)=>{
+  if(env&&env.production) 可以作为环境判读
+}

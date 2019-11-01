@@ -1,8 +1,5 @@
 
-const path = require("path");
 const webpack = require('webpack');
-const webpackMerge=require('webpack-merge');
-const commonConfig=require('./webpack.common');
 
 let devConfig = {
     mode: "development",
@@ -14,6 +11,10 @@ let devConfig = {
         hot: true,
         hotOnly: true,//即使没有热更新也不刷新
     },
+    output:{
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+    },
     plugins: [
         new webpack.HotModuleReplacementPlugin()//配合devServer,样式和js调试
     ],
@@ -22,5 +23,5 @@ let devConfig = {
     }
 }
 
-module.exports=webpackMerge(commonConfig,devConfig);
+module.exports=devConfig;
 

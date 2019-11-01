@@ -70,17 +70,31 @@
 // }
 
 
-document.addEventListener('click', () => {
-    // var element = document.createElement('div');
-    // element.innerHTML = _.join(['Dell', "Lee"], '-');
-    // element.innerHTML = "Dell Lee";
-    // document.body.appendChild(element);
-    // getComponent().then(element => {
-    //     document.body.appendChild(element);
-    // })
-    import (/* webpackPrefetch: true */ './click').then(({default:func})=>{
-        func();
-    })
-})
+// document.addEventListener('click', () => {
+//     // var element = document.createElement('div');
+//     // element.innerHTML = _.join(['Dell', "Lee"], '-');
+//     // element.innerHTML = "Dell Lee";
+//     // document.body.appendChild(element);
+//     // getComponent().then(element => {
+//     //     document.body.appendChild(element);
+//     // })
+//     import (/* webpackPrefetch: true */ './click').then(({default:func})=>{
+//         func();
+//     })
+// })
 
 
+// import './index.css';
+// import './style.css';
+// console.log('hello world')
+
+
+// import _ from "lodash";
+// import $ from 'jquery';
+// import {ui} from './jquery.ui'
+// ui();
+// const dom=$('<div>');
+// dom.html(_.join(['Dell','Lee'],'---'));
+// $('body').append(dom);
+
+console.log(this)
