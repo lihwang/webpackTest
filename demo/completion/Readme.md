@@ -62,3 +62,44 @@ webpack --env.production=true
 可以在module.exports=(env)=>{
   if(env&&env.production) 可以作为环境判读
 }
+
+
+
+[PWA](https://www.jianshu.com/p/098af61bbe04)
+离线使用
+
+Type-script
+安装typescript 还有tsconfig.json
+导入包需要import * as --- from '--' 
+
+
+webpackDevServer实现请求转发
+一般请求不会去写绝对路径而是使用相对路径，当时有相对路径时就要区分线上和测试环境接口
+
+
+webpackDevServer解决单页路由的问题****
+当使用BrowserRouter去开发路由时
+直接通过路由去查看页面会被误认为去访问接口
+historyApiFallback（仅在测试环境解决）
+上线得单独解决（后端修改ngix解决hash路由）
+
+
+[ESLint]未学习完成
+为了方便可以直接使用npx init -y提示解决
+
+
+提升webpack打包速度
+1.使用新的webpack，node，npm和yarn
+2.exclude: /node_modules/,include去限定打包范围。提升速度降低loader的使用
+3.Plugin尽可能的少使用，可靠性和官方
+4.resolve参数合理配置
+5.使用DllPlugin提高打包速度  
+  5.1第三方文件只打包一次 add-asset-html-webpack-plugin
+  5.2我们在引入第三方模块文件时就用dll文件 webpack.DllPlugin做映射文件
+  5.3再使用去做映射 webpack.DllReferencePlugin
+6.控制包文件大小 类似shaking（选用一些模块性的包）
+7.thread-loader，parallel-webpack,happypack多进程打包（多页应用可以考虑）
+8.合理使用sourceMap
+9.结合stats分析打包结果来优化
+10.开发环境内存编译
+11.开发环境无用插件剔除。类似代码压缩

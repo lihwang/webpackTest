@@ -97,4 +97,57 @@
 // dom.html(_.join(['Dell','Lee'],'---'));
 // $('body').append(dom);
 
-console.log(this)
+// console.log(this)
+
+// if('serviceWorker' in navigator){
+//     window.addEventListener('load',()=>{
+//         navigator.serviceWorker.register('./service-worker.js').then(registration=>{
+//             console.log('serviceWorker registed');
+//         }).catch((error)=>{
+//             console.log('serviceWorker registed error');
+//         })
+//     })
+// }
+
+
+import React,{ Component } from 'react'
+import ReactDom from 'react-dom';
+// import axios from 'axios';
+import { BrowserRouter, Route } from 'react-router-dom'
+// class App extends Component {
+//     componentDidMount() {
+//         axios.get('/react/api/header.json').then((res)=>{
+//             console.log(res)
+//         })
+//     }
+//     render() {
+//         return <div>
+//             Hello World
+//         </div>
+//     }
+// }
+
+
+// ReactDom.render(<App />, document.getElementById('root'));
+
+import Home from './home'
+import List from './List'
+
+class App extends Component {
+
+    render() {
+        return <BrowserRouter>
+            <div>
+                <Route path="/" exact component={Home} />
+                <Route path="/list" component={List} />
+            </div>
+        </BrowserRouter>
+    }
+}
+
+
+ReactDom.render(<App />, document.getElementById('root'));
+
+
+
+

@@ -10,6 +10,29 @@ let devConfig = {
         open: true,
         hot: true,
         hotOnly: true,//即使没有热更新也不刷新
+        // historyApiFallback:true,
+        historyApiFallback:{
+            rewrites:[
+                { from: "/abc.html", to: '/list.html' }
+            ]
+        },
+        proxy:{
+            "/react/api":{
+                target:"https://www.dell-lee.com",
+                secure:false,//htts转发处理
+                pathRewrite:{
+                    "header.json":"demo.json",
+                },
+                changeOrigin:true,
+                // bypass: function(req, res, proxyOptions) {
+                //     if (req.headers.accept.indexOf('html') !== -1) {
+                //       console.log('Skipping proxy for browser request.');
+                //       return false;
+                //     }
+                // }
+            },
+
+        }
     },
     output:{
         filename: '[name].js',
