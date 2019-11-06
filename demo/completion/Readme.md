@@ -103,3 +103,43 @@ historyApiFallback（仅在测试环境解决）
 9.结合stats分析打包结果来优化
 10.开发环境内存编译
 11.开发环境无用插件剔除。类似代码压缩
+
+
+多页开发
+
+
+如何编写一个loader
+loader的用处：
+例子：
+1.批量去处理类似得代码，替换代码什么，
+2.可以用webpack，通过占位符去替换中英文 {{}}
+module.exports=function(source){}  source //代码原文
+
+
+如何编写一个Plugin
+发布订阅和事件驱动的模式
+插件参数通过constructor接收并初始化
+
+class 类名{
+    constructor(){
+        
+    }
+    apply(compiler){  //compiler--webpack的实例
+
+    }
+}
+
+module.exports=类名;
+
+  "debug":"node --inspect --inspect-brk node_module/webpack/bin/webpack.js"
+  利用node启动服务可以进行调试代码 --inspect开启调试  --inspect-brk断点操作
+  debugger在业务代码里加上，通过node调试
+
+
+Bundler 源码编写（模块分析）
+cnpm i cli-highlight -g 高量显示命令行代码
+node bundler.js | highlight  后面得加上
+
+获取文本内容后，怎么接着取文件内容
+npm i @babel/parser  parse方法=>抽象语法树AST
+npm i @babel/traverse 帮助解析内部所有的import 否则要根据每层的类型进行判断统计

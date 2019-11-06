@@ -12,38 +12,48 @@ const devConfig = require('./webpack.dev');
 const prodConfig = require('./webpack.prod');
 const devMode = process.env.NODE_ENV !== 'production';
 
-
-const plugins = [
-    new HtmlWebpackPlugin({
-        template: "src/index.html"
-    }),
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-        // filename: devMode ? '[name].css' : '[name].[hash].css',
-        // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
-        filename: '[name].css',
-        chunkFilename: '[id].css',
-        ignoreOrder: false,
-    }),
-];
-
-const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
-files.forEach(file => {
-    if (/.*\.dll.js$/.test(file)) {
-        plugins.push(new addAssetHtmlWebpackPlugin({
-            filepath: path.resolve(__dirname, "../dll", file)
+const makePlugins = (configs) => {
+    const plugins = [
+        new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            // filename: devMode ? '[name].css' : '[name].[hash].css',
+            // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false,
+        })
+    ]
+    //多页面打包
+    Object.keys(configs.entry).forEach(item => {
+        plugins.push(new HtmlWebpackPlugin({
+            template: "src/index.html",
+            filename: `${item}.html`,
+            chunks: ['runtime', 'vendors', item]//希望增加的模块   自动化处理多页应用
         }))
-    }
-    if (/.*\.manifest.json$/.test(file)) {
-        plugins.push(new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, "../dll",file)
-        }))
-    }
-})
+    })
+    //处理公共需求包
+    const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
+    files.forEach(file => {
+        if (/.*\.dll.js$/.test(file)) {
+            plugins.push(new addAssetHtmlWebpackPlugin({
+                filepath: path.resolve(__dirname, "../dll", file)
+            }))
+        }
+        if (/.*\.manifest.json$/.test(file)) {
+            plugins.push(new webpack.DllReferencePlugin({
+                manifest: path.resolve(__dirname, "../dll", file)
+            }))
+        }
+    })
+
+    return plugins;
+}
+
 
 const commonConfig = {
     entry: {
         main: './src/index.js',
+        list:"./src/List.js"
     },
     output: {
         filename: '[name].js',
@@ -100,13 +110,13 @@ const commonConfig = {
             }
         ],
     },
-    plugins: plugins,
+    // plugins: plugins,
     // [
-        // new webpack.ProvidePlugin({ //当发现业务代码中使用了$模块内部会自动导入'jquery',
-        //     $:"jquery",
-        //     _join:['lodash','join'],  //打包指定的方法lodash的join，可以全局用_join
-        // })
-        // new BundleAnalyzerPlugin()
+    // new webpack.ProvidePlugin({ //当发现业务代码中使用了$模块内部会自动导入'jquery',
+    //     $:"jquery",
+    //     _join:['lodash','join'],  //打包指定的方法lodash的join，可以全局用_join
+    // })
+    // new BundleAnalyzerPlugin()
     // ],
     optimization: {
         runtimeChunk: {//老版本未更改hash变化解决
@@ -154,6 +164,9 @@ const commonConfig = {
     },
     performance: false,//禁止提示性能问题
 }
+
+commonConfig.plugins = makePlugins(commonConfig);
+
 
 module.exports = () => {
     if (devMode) {

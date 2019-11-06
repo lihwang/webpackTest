@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@babel/core": "^7.7.0",
+    "@babel/parser": "^7.7.0",
+    "@babel/traverse": "^7.7.0"
+  },
+  "name": "webpack-bundler",
+  "version": "1.0.0",
+  "main": "bundler.js",
+  "devDependencies": {
+    "@babel/preset-env": "^7.7.1"
+  },
+  "scripts": {
+    "debug": "node --inspect --inspect-brk ./bundler.js",
+    "start":"node ./bundler.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
